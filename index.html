@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dear Tomorrow</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#080D20">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dear Tomorrow">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080D20;--navy:#111A35;--purple:#34265C;--text:#F5F3FF;--lav:#C4B5FD;--gold:#F6D98B;--muted:#9AA5C4;--glass:rgba(17,26,53,.62);--line:rgba(196,181,253,.22);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 20% 0%,var(--purple),transparent 55%),linear-gradient(var(--bg),var(--navy));background-color:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,sans-serif}
+canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+main,nav{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:0 20px}
+nav{display:flex;justify-content:space-between;align-items:center;padding-top:18px;padding-bottom:10px}
+.logo{font:italic 500 1.5rem 'Cormorant Garamond',Georgia,serif;color:var(--gold);cursor:pointer}
+nav button{background:none;border:0;color:var(--lav);font:inherit;cursor:pointer;margin-left:14px;padding:6px 2px}
+h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;margin:0}
+h1{font-size:clamp(2.6rem,9vw,4.6rem);line-height:1.05}
+h2{font-size:1.9rem;margin-bottom:12px}
+.hero{text-align:center;padding:48px 0 30px}
+.hero .sub{font-size:1.3rem;color:var(--lav);margin:14px 0 6px;font-family:'Cormorant Garamond',serif;font-style:italic}
+.hero p{max-width:520px;margin:10px auto 24px;color:var(--muted)}
+.glass{background:var(--glass);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px}
+.btn{background:linear-gradient(135deg,var(--lav),#9b87f5);color:#14102b;border:0;border-radius:999px;padding:12px 24px;font:500 1rem Inter,sans-serif;cursor:pointer;margin:4px}
+.btn.alt{background:transparent;color:var(--lav);border:1px solid var(--line)}
+.btn:hover{filter:brightness(1.1)}
+.env{font-size:4.5rem;filter:drop-shadow(0 0 18px var(--gold));animation:float 5s ease-in-out infinite;display:block;margin:6px auto}
+@keyframes float{50%{transform:translateY(-8px)}}
+.cd{font-variant-numeric:tabular-nums;color:var(--gold);font-size:1.05rem}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.badge{display:inline-block;font-size:.75rem;padding:2px 10px;border-radius:99px;border:1px solid var(--line);color:var(--lav)}
+.badge.ready{color:var(--gold);border-color:var(--gold);box-shadow:0 0 12px rgba(246,217,139,.35)}
+input,textarea,select{width:100%;background:rgba(8,13,32,.7);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit;margin:4px 0 12px}
+textarea{min-height:200px;resize:none;font:1.05rem/1.7 'Cormorant Garamond',Georgia,serif}
+label{font-size:.85rem;color:var(--muted)}
+.chips button{background:transparent;color:var(--lav);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin:0 6px 8px 0;cursor:pointer;font:inherit;font-size:.9rem}
+.chips button.on{background:var(--purple);border-color:var(--lav)}
+.small{font-size:.85rem;color:var(--muted)}
+.paper{background:#F5F0E1;color:#2b2438;border-radius:6px;padding:28px;font:1.15rem/1.8 'Cormorant Garamond',Georgia,serif;white-space:pre-wrap;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.overlay{position:fixed;inset:0;z-index:5;background:rgba(8,13,32,.92);display:none;align-items:center;justify-content:center;text-align:center;padding:20px}
+.overlay.on{display:flex}
+.overlay .env{font-size:6rem;animation:seal 1.2s ease-in-out}
+@keyframes seal{0%{transform:scale(.6);opacity:0}50%{transform:scale(1.15);opacity:1}100%{transform:scale(1)}}
+.warn{border-color:var(--gold);color:var(--gold);font-size:.85rem}
+.hide{display:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+.quote{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line);text-align:center;font:italic 500 1.25rem/1.5 'Cormorant Garamond',Georgia,serif;color:var(--lav)}
+.quote cite{display:block;margin-top:6px;font:400 .85rem Inter,sans-serif;font-style:normal;color:var(--muted)}
+.mus{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:4;background:var(--glass);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);color:var(--lav);border-radius:999px;padding:8px 14px;font:inherit;font-size:.85rem;cursor:pointer}
+.link{background:none;border:0;color:var(--lav);text-decoration:underline;cursor:pointer;font:inherit;padding:0}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:30px 0 40px}
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+<nav><span class="logo" onclick="go('home')">Dear Tomorrow</span><span id="nv"></span></nav>
+<main id="app"></main>
+<button id="mus" class="mus" aria-pressed="false"></button>
+<div class="overlay" id="ov"><div><span class="env">✉️</span><h2>Sealed.</h2><p id="ovmsg" class="cd"></p></div></div>
+
+<script>
+const $=s=>document.querySelector(s);
+let user=null,letters=[],draft={title:'',content:'',mood:'',unlock:''};
+const ls=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||d)}catch(e){return JSON.parse(d)}};
+const lw=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const KEY=()=>'dt_letters_'+user.id,DKEY=()=>'dt_draft_'+user.id;
+function loadUser(){letters=ls(KEY(),'[]');draft=Object.assign({title:'',content:'',mood:'',unlock:''},ls(DKEY(),'{}'))}
+const save=()=>{if(user)lw(KEY(),letters)};
+const saveDraft=()=>{if(user)lw(DKEY(),draft)};
+// DEMO auth: accounts live only in this browser. Replace these methods with supabase.auth.* calls in the real build.
+const Auth={
+ users:()=>ls('dt_users','[]'),
+ async h(pw,salt){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(salt+pw));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')},
+ async signUp(name,email,pw){email=email.trim().toLowerCase();if(!name.trim())throw Error('Please add a display name.');if(!/^\S+@\S+\.\S+$/.test(email))throw Error('Enter a valid email address.');if(pw.length<8)throw Error('Password must be at least 8 characters.');const u=this.users();if(u.some(x=>x.email===email))throw Error('An account with this email already exists. Try signing in.');const salt=crypto.randomUUID();const rec={id:crypto.randomUUID(),email,name:name.trim().slice(0,40),salt,hash:await this.h(pw,salt)};u.push(rec);lw('dt_users',u);lw('dt_session',rec.id);return rec},
+ async signIn(email,pw){email=email.trim().toLowerCase();const r=this.users().find(x=>x.email===email);if(!r||await this.h(pw,r.salt)!==r.hash)throw Error('Email or password is incorrect.');lw('dt_session',r.id);return r},
+ async reset(){throw Error('Password reset emails need the Supabase backend, so they are not available in this demo.')},
+ out(){try{localStorage.removeItem('dt_session')}catch(e){}},
+ restore(){const id=ls('dt_session','null');return this.users().find(x=>x.id===id)||null}
+};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=t=>new Date(t).toLocaleString([], {dateStyle:'medium',timeStyle:'short'});
+const moods=['😊 Happy','😌 Calm','😰 Anxious','🌱 Hopeful','😢 Sad','✨ Grateful'];
+const prompts=['What makes you happy right now?','What are you afraid of?','What do you hope changes?','What are you proud of?','What do you want your future self to remember?','Who matters most to you today?','What dream are you chasing?','What advice would you give yourself?'];
+let view='home',openId=null,mood='';
+
+function cdText(t){let s=Math.max(0,Math.floor((t-Date.now())/1000));const d=Math.floor(s/86400);s%=86400;const h=Math.floor(s/3600);s%=3600;const m=Math.floor(s/60);s%=60;const p=n=>String(n).padStart(2,'0');return `${d} days · ${p(h)} hours · ${p(m)} minutes · ${p(s)} seconds`}
+const status=l=>l.openedAt?'opened':(Date.now()>=l.unlockAt?'ready':'sealed');
+
+let next='capsules',amode='in';
+function go(v,id){if(!user&&['write','capsules','reader'].includes(v)){next=v;v='auth';amode='in'}view=v;openId=id||null;render();window.scrollTo(0,0)}
+function render(){navR();$('#app').innerHTML=({home,write,capsules,reader,auth})[view]();if(view==='write')bindWrite();if(view==='auth')bindAuth()}
+function navR(){$('#nv').innerHTML=user?`<span class="small">${esc(user.name)}</span><button onclick="go('capsules')">My Capsules</button><button onclick="go('write')">Write</button><button onclick="signOut()">Sign out</button>`:`<button onclick="amode='in';go('auth')">Sign in</button><button onclick="amode='up';go('auth')">Sign up</button>`}
+function signOut(){Auth.out();user=null;letters=[];go('home')}
+function setMode(m){amode=m;render()}
+function auth(){const up=amode==='up',fg=amode==='fg';
+ return `<div class="glass" style="max-width:420px;margin:30px auto"><div style="text-align:center"><span class="env" style="font-size:3rem">🌙</span><h2>${fg?'Reset your password':up?'Create your account':'Welcome back, stargazer.'}</h2><p class="small">${up?'Your letters stay private to your account.':fg?'Enter your email to get a reset link.':'Sign in to write and open your time capsules.'}</p></div>
+ <form id="af" novalidate>${up?'<label for="name">Display name</label><input id="name" name="name" autocomplete="nickname" maxlength="40">':''}
+ <label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email">
+ ${fg?'':`<label for="pw">Password</label><input id="pw" name="pw" type="password" autocomplete="${up?'new-password':'current-password'}">`}
+ <div id="aerr" class="small" role="alert" style="color:#fda4af;min-height:1.4em"></div>
+ <button class="btn" style="width:100%;margin:6px 0">${fg?'Send reset link':up?'Create account':'Sign in'}</button></form>
+ <p class="small" style="text-align:center">${fg?`<button class="link" onclick="setMode('in')">Back to sign in</button>`:up?`Already have an account? <button class="link" onclick="setMode('in')">Sign in</button>`:`<button class="link" onclick="setMode('fg')">Forgot password?</button> · <button class="link" onclick="setMode('up')">Create account</button>`}</p>
+ <blockquote class="quote">“We are made of star stuff. We are a way for the universe to know itself.”<cite>— Carl Sagan</cite></blockquote></div>`}
+function bindAuth(){const f=$('#af');f.onsubmit=async e=>{e.preventDefault();const err=$('#aerr'),b=f.querySelector('button'),v=n=>f.elements[n]?f.elements[n].value:'';err.textContent='';b.disabled=true;
+ try{if(amode==='fg')await Auth.reset(v('email'));else{user=amode==='up'?await Auth.signUp(v('name'),v('email'),v('pw')):await Auth.signIn(v('email'),v('pw'));loadUser();go(next);return}}catch(x){err.textContent=x.message}b.disabled=false}}
+
+function home(){
+ return `<section class="hero"><span class="env">✉️</span><h1>Dear me, someday…</h1>
+ <div class="sub">A little time capsule for the person you’re becoming.</div>
+ <p>Write down your hopes, dreams, fears, and little everyday moments. Choose a future date, seal your letter, and let time carry it to you.</p>
+ <button class="btn" onclick="go('write')">Write a Letter to My Future Self</button><button class="btn alt" onclick="go('capsules')">Explore My Time Capsules</button></section>
+ <blockquote class="quote" style="border:0;margin:6px 0 26px">“…I am struck by the beauty of the universe…”<cite>— Ajai Ahmad Khawaja</cite></blockquote>
+ <h2>How it works</h2><div class="grid">
+ <div class="glass"><h3>1 · Write</h3><p class="small">Pour it all out. Pick a mood, try a prompt, or write freely.</p></div>
+ <div class="glass"><h3>2 · Seal</h3><p class="small">Choose the day it unlocks. The envelope closes until then.</p></div>
+ <div class="glass"><h3>3 · Remember</h3><p class="small">When the time comes, open it and see how far you’ve come.</p></div></div>
+ <footer>App made by Zhang Shui Yue with love 🌙</footer>`}
+
+function write(){
+ const presets=[['Tomorrow',1],['In a week',7],['In a month',30],['In six months',182],['One year',365]];
+ return `<h2>Dear future me,</h2>
+ <div class="glass"><label>Prompt (optional)</label><div class="chips" id="pr">${prompts.map((p,i)=>`<button data-i="${i}">${p}</button>`).join('')}</div>
+ <label>Title</label><input id="ti" maxlength="80" placeholder="A title for this capsule" value="${esc(draft.title)}">
+ <label>Your letter</label><textarea id="co" placeholder="Start writing…">${esc(draft.content)}</textarea>
+ <div class="small" id="cnt"></div><br><label>Mood (optional)</label>
+ <div class="chips" id="md">${moods.map(m=>`<button class="${draft.mood===m?'on':''}">${m}</button>`).join('')}</div>
+ <label>Unlock date &amp; time (${Intl.DateTimeFormat().resolvedOptions().timeZone})</label>
+ <div class="chips" id="ps">${presets.map(([n,d])=>`<button data-d="${d}">${n}</button>`).join('')}</div>
+ <input type="datetime-local" id="un" value="${draft.unlock}">
+ <div id="err" class="small" style="color:#fda4af"></div>
+ <button class="btn" id="seal">Seal My Letter</button><button class="btn alt" id="clr">Discard draft</button>
+ <div class="small" id="sv">Draft saved on this device.</div></div>`}
+
+function bindWrite(){
+ const co=$('#co'),ti=$('#ti'),un=$('#un');
+ const grow=()=>{co.style.height='auto';co.style.height=Math.max(200,co.scrollHeight)+'px'};
+ const upd=()=>{draft.title=ti.value;draft.content=co.value;draft.unlock=un.value;saveDraft();const w=co.value.trim()?co.value.trim().split(/\s+/).length:0;$('#cnt').textContent=`${w} words · ${co.value.length} characters`;grow()};
+ let t;const deb=()=>{clearTimeout(t);$('#sv').textContent='Saving…';t=setTimeout(()=>{upd();$('#sv').textContent='Draft saved on this device.'},400)};
+ [ti,co,un].forEach(e=>e.addEventListener('input',deb));upd();
+ $('#pr').onclick=e=>{const i=e.target.dataset.i;if(i===undefined)return;co.value=(co.value?co.value+'\n\n':'')+prompts[i]+'\n';upd();co.focus()};
+ $('#md').onclick=e=>{if(e.target.tagName!=='BUTTON')return;draft.mood=draft.mood===e.target.textContent?'':e.target.textContent;saveDraft();[...$('#md').children].forEach(b=>b.classList.toggle('on',b.textContent===draft.mood))};
+ $('#ps').onclick=e=>{const d=e.target.dataset.d;if(!d)return;const x=new Date(Date.now()+d*864e5);x.setSeconds(0);un.value=new Date(x-x.getTimezoneOffset()*6e4).toISOString().slice(0,16);upd()};
+ $('#clr').onclick=()=>{if(confirm('Discard this draft?')){draft={title:'',content:'',mood:'',unlock:''};saveDraft();render()}};
+ $('#seal').onclick=()=>{upd();const err=$('#err');
+  if(!draft.title.trim())return err.textContent='Please give your letter a title.';
+  if(draft.content.trim().length<10)return err.textContent='Your letter is a little short. Write a few more words.';
+  const at=new Date(draft.unlock).getTime();
+  if(!draft.unlock||isNaN(at))return err.textContent='Choose when this letter should unlock.';
+  if(at<=Date.now()+60000)return err.textContent='The unlock time must be in the future.';
+  if(!confirm('Seal this letter until '+fmt(at)+'?'))return;
+  letters.unshift({id:crypto.randomUUID(),title:draft.title.trim(),content:draft.content,mood:draft.mood,createdAt:Date.now(),unlockAt:at,tz:Intl.DateTimeFormat().resolvedOptions().timeZone,openedAt:null,reflection:''});
+  save();draft={title:'',content:'',mood:'',unlock:''};saveDraft();
+  $('#ovmsg').textContent='Opens '+fmt(at);$('#ov').classList.add('on');
+  setTimeout(()=>{$('#ov').classList.remove('on');go('capsules')},1500)}}
+
+function card(l){const s=status(l);
+ return `<div class="glass"><span class="badge ${s==='ready'?'ready':''}">${s==='sealed'?'Sealed':s==='ready'?'Ready to open':'Opened'}</span>
+ <h3 style="font-size:1.5rem;margin:8px 0 2px">${esc(l.title)}</h3><div class="small">Written ${fmt(l.createdAt)}${l.mood?' · '+l.mood:''}</div>
+ ${s==='sealed'?`<div class="small" style="margin-top:8px">Your letter will find you in…</div><div class="cd" data-t="${l.unlockAt}">${cdText(l.unlockAt)}</div><div class="small">Unlocks ${fmt(l.unlockAt)}</div>`:''}
+ ${s==='ready'?`<p><button class="btn" onclick="go('reader','${l.id}')">Open Your Letter</button></p>`:''}
+ ${s==='opened'?`<p><button class="btn alt" onclick="go('reader','${l.id}')">Read again</button></p>`:''}</div>`}
+
+function capsules(){
+ if(!letters.length)return `<div class="hero"><span class="env">🌙</span><h2>No capsules yet</h2><p>Welcome, stargazer. Your words are waiting for their moment. Write your first letter.</p><button class="btn" onclick="go('write')">Write my first letter</button></div>`;
+ const g=k=>letters.filter(l=>status(l)===k).sort((a,b)=>a.unlockAt-b.unlockAt);
+ const sec=(t,a)=>a.length?`<h2>${t}</h2><div class="grid">${a.map(card).join('')}</div>`:'';
+ return `<div class="glass"><h3 style="font-size:1.6rem">Welcome back, stargazer.</h3><div class="small">${letters.length} written · ${g('sealed').length} sealed · ${g('ready').length} ready · ${g('opened').length} opened</div></div>`+sec('Ready to open',g('ready'))+sec('Upcoming time capsules',g('sealed'))+sec('Past memories',g('opened'))+`<p class="glass warn">Prototype note: accounts and letters are stored only on this device, so the lock is not tamper-proof. A secure version needs the Supabase backend.</p>`}
+
+function reader(){
+ const l=letters.find(x=>x.id===openId);if(!l)return capsules();
+ if(Date.now()<l.unlockAt)return `<div class="glass">This letter is still sealed.</div>`;
+ if(!l.openedAt){l.openedAt=Date.now();save()}
+ return `<h2>Look how far you’ve come.</h2><div class="small">Written ${fmt(l.createdAt)} · Unlocked ${fmt(l.unlockAt)}</div><br>
+ <h3 style="font-size:1.8rem;margin-bottom:10px">${esc(l.title)}</h3><div class="paper">${esc(l.content)}</div><br>
+ <div class="glass"><h3>Your reflection</h3><p class="small">What surprised you? What changed? What stayed the same? What would you tell your past self?</p>
+ <textarea id="rf" style="min-height:120px">${esc(l.reflection)}</textarea>
+ <button class="btn" onclick="saveRef('${l.id}')">Save reflection</button><button class="btn alt" onclick="window.print()">Print</button><button class="btn alt" onclick="del('${l.id}')">Delete</button><button class="btn alt" onclick="go('capsules')">Back</button><span class="small" id="rs"></span></div>`}
+function saveRef(id){const l=letters.find(x=>x.id===id);l.reflection=$('#rf').value;save();$('#rs').textContent=' Saved.'}
+function del(id){if(confirm('Delete this letter forever?')){letters=letters.filter(x=>x.id!==id);save();go('capsules')}}
+
+setInterval(()=>{let flip=false;document.querySelectorAll('[data-t]').forEach(e=>{const t=+e.dataset.t;if(t-Date.now()<=0&&view==='capsules')flip=true;e.textContent=cdText(t)});if(flip)render()},1000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&view==='capsules')render()});
+
+// starfield
+const cv=$('#sky'),cx=cv.getContext('2d');let W,H,stars=[],shoot=null;
+function size(){W=cv.width=innerWidth;H=cv.height=innerHeight;stars=Array.from({length:Math.min(140,W*H/9000)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+.2,p:Math.random()*6}))}
+size();addEventListener('resize',size);
+const still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function draw(t){cx.clearRect(0,0,W,H);stars.forEach(s=>{cx.globalAlpha=still?.7:.35+.65*Math.abs(Math.sin(t/1400+s.p));cx.fillStyle='#F5F3FF';cx.beginPath();cx.arc(s.x,s.y,s.r,0,7);cx.fill()});
+ if(!still){if(!shoot&&Math.random()<.002)shoot={x:Math.random()*W,y:Math.random()*H*.4,l:0};
+ if(shoot){cx.globalAlpha=1-shoot.l/60;cx.strokeStyle='#F6D98B';cx.beginPath();cx.moveTo(shoot.x,shoot.y);cx.lineTo(shoot.x-40,shoot.y-20);cx.stroke();shoot.x+=9;shoot.y+=4.5;if(++shoot.l>60)shoot=null}
+ requestAnimationFrame(draw)}}
+requestAnimationFrame(draw);
+// Original lofi-style loop generated with Web Audio (no audio files needed)
+let musicOn=false,musicStarted=false,actx,mg,nbuf,mtimer,mstep=0,mnext=0;
+const CH=[[48,52,55,59],[45,48,52,55],[50,53,57,60],[43,47,50,53]],PN=[72,74,76,79,81],BT=60/70/2,hz=m=>440*Math.pow(2,(m-69)/12);
+function mInit(){actx=new (window.AudioContext||window.webkitAudioContext)();mg=actx.createGain();mg.gain.value=0;const lp=actx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1500;mg.connect(lp);lp.connect(actx.destination);
+ nbuf=actx.createBuffer(1,actx.sampleRate,actx.sampleRate);let d=nbuf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+ const cb=actx.createBuffer(1,actx.sampleRate*3,actx.sampleRate);d=cb.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()<.0015?(Math.random()*2-1)*.5:0;
+ const cs=actx.createBufferSource(),cg=actx.createGain();cs.buffer=cb;cs.loop=true;cg.gain.value=.15;cs.connect(cg);cg.connect(mg);cs.start()}
+function tone(m,t,dur,type,g){const o=actx.createOscillator(),a=actx.createGain();o.type=type;o.frequency.value=hz(m);o.detune.value=(Math.random()-.5)*14;a.gain.setValueAtTime(0,t);a.gain.linearRampToValueAtTime(g,t+.2);a.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(a);a.connect(mg);o.start(t);o.stop(t+dur+.05)}
+function nz(t,dur,type,f,g){const s=actx.createBufferSource(),fl=actx.createBiquadFilter(),a=actx.createGain();s.buffer=nbuf;fl.type=type;fl.frequency.value=f;a.gain.setValueAtTime(g,t);a.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(fl);fl.connect(a);a.connect(mg);s.start(t);s.stop(t+dur)}
+function kick(t){const o=actx.createOscillator(),a=actx.createGain();o.frequency.setValueAtTime(130,t);o.frequency.exponentialRampToValueAtTime(40,t+.14);a.gain.setValueAtTime(.55,t);a.gain.exponentialRampToValueAtTime(.0001,t+.25);o.connect(a);a.connect(mg);o.start(t);o.stop(t+.3)}
+function beat(s,t){const i=s%8,ch=CH[Math.floor(s/8)%4];
+ if(i===0)ch.forEach((m,k)=>tone(m+12,t+k*.05,3.5,'sine',.07));
+ if(i===0||i===5)kick(t);if(i===4)nz(t,.18,'bandpass',1800,.18);if(i%2)nz(t,.05,'highpass',7000,.06);
+ if(Math.random()<.3)tone(PN[Math.floor(Math.random()*5)],t,1.4,'triangle',.06)}
+function sched(){while(mnext<actx.currentTime+1){beat(mstep++,mnext);mnext+=BT}}
+const mpref=ls('dt_music','true');
+function musicUi(){const b=$('#mus');b.textContent=musicOn?'\ud83c\udfb5 Lofi on':(mpref!==false&&!musicStarted?'\ud83c\udfb5 Tap to play lofi':'\ud83d\udd07 Lofi off');b.setAttribute('aria-pressed',musicOn)}
+function musicStart(){try{if(!actx)mInit();actx.resume();musicOn=true;musicStarted=true;mg.gain.cancelScheduledValues(actx.currentTime);mg.gain.setValueAtTime(mg.gain.value,actx.currentTime);mg.gain.linearRampToValueAtTime(.9,actx.currentTime+2);mnext=actx.currentTime+.1;clearInterval(mtimer);mtimer=setInterval(sched,200)}catch(e){musicOn=false}musicUi()}
+function musicStop(){musicOn=false;clearInterval(mtimer);mg.gain.cancelScheduledValues(actx.currentTime);mg.gain.setValueAtTime(mg.gain.value,actx.currentTime);mg.gain.linearRampToValueAtTime(0,actx.currentTime+.6);musicUi()}
+function firstGo(e){if(e.target.closest&&e.target.closest('#mus'))return;removeEventListener('pointerdown',firstGo);removeEventListener('keydown',firstGo);if(mpref!==false&&!musicStarted)musicStart()}
+addEventListener('pointerdown',firstGo);addEventListener('keydown',firstGo);
+$('#mus').onclick=()=>{musicOn?musicStop():musicStart();lw('dt_music',musicOn)};musicUi();
+
+user=Auth.restore();if(user)loadUser();
+render();
+</script>
+<script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script>
+</body>
+</html>
